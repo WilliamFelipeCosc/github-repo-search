@@ -41,7 +41,7 @@ function CommitPage() {
           setCommits(data);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           setCommits([]);
         })
         .finally(() => setCommitLoading(false));

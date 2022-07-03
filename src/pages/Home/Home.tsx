@@ -19,7 +19,7 @@ function Home() {
           setRepos(data);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           setRepos([]);
         })
         .finally(() => setLoading(false));
