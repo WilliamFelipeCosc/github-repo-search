@@ -1,22 +1,27 @@
-import { useContext, useEffect } from "react";
-import Header from "../../components/Header/Header";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
-import { getBranches, getCommits, getRepos } from "../../services/getGit";
+import { getRepos } from "../../services/getGit";
 
 function Home() {
-  const { userName, gamb } = useContext(UserContext);
+  const { userName, searchCount } = useContext(UserContext);
+  const [ repos, setRepos ] = useState<any>([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if(userName)
-    getRepos(userName).then(data => console.log(data))
+    getRepos(userName).then(data => setRepos(data))
 
-  }, [gamb])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchCount])
 
-  console.log(userName)
+  const handleClick = (repoId:string) => navigate(`commits/${userName}&${repoId}`) 
+
+  console.log(searchCount)
 
   return (
     <div>
-      <Header />
+      {repos?.length > 0 && repos?.map((repo:any) => <div key={repo.id} onClick={() => handleClick(repo.name)}>{repo.name}</div>)}
     </div>
   );
 }

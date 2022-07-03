@@ -6,7 +6,7 @@ import { UserContext } from "../../contexts/userContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Header() {
-  const { userName, setUserName, gamb, setGamb } = useContext(UserContext);
+  const { userName, setUserName, searchCount, setSearchCount } = useContext(UserContext);
   const navigator = useNavigate();
   const location = useLocation();
 
@@ -15,7 +15,7 @@ function Header() {
   const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
     if(location.pathname === '/'){
-      setGamb(gamb + 1)
+      setSearchCount(searchCount + 1)
     } else {
       navigator('/');
     }

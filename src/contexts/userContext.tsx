@@ -3,8 +3,8 @@ import { createContext, ReactNode, useState } from "react";
 export const UserContext = createContext({
   userName: "string",
   setUserName: (userName: string) => {},
-  gamb: 0,
-  setGamb: (n: number) => {},
+  searchCount: 0,
+  setSearchCount: (n: number) => {},
 });
 
 interface UserContextProviderProps {
@@ -13,9 +13,9 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const [userName, setUserName] = useState("");
-  const [gamb, setGamb] = useState(1);
+  const [searchCount, setSearchCount] = useState(0);
   return (
-    <UserContext.Provider value={{ userName, setUserName, gamb, setGamb }}>
+    <UserContext.Provider value={{ userName, setUserName, searchCount, setSearchCount }}>
       {children}
     </UserContext.Provider>
   );
