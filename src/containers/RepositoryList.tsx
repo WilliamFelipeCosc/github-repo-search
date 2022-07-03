@@ -12,7 +12,7 @@ function RepositoriesList({ repos, handleClick }: Props) {
       subheader={<ListSubheader component="div">Repositórios</ListSubheader>}
     >
       {repos?.map((repo: any) => (
-        <RepositoryListItem repository={repo} handleClick={handleClick} />
+        <RepositoryListItem  key={repo.id} repository={repo} handleClick={handleClick} />
       ))}
     </List>
   );

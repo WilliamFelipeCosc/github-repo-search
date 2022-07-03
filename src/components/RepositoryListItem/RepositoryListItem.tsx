@@ -9,7 +9,6 @@ function RepositoryListItem({ repository, handleClick }: Props) {
   return (
     <ListItem
       disablePadding
-      key={repository.id}
       onClick={() => handleClick(repository.name)}
     >
       <ListItemButton>

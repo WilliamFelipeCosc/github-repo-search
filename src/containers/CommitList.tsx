@@ -6,7 +6,6 @@ interface Props {
 }
 
 function CommitsList({ commits }: Props) {
-  console.log(commits);
   return (
     <Box mt={2}>
       <List subheader={<ListSubheader component="div">Commits</ListSubheader>}>

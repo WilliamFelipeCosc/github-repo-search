@@ -10,8 +10,6 @@ function Header() {
   const navigator = useNavigate();
   const location = useLocation();
 
-  console.log(location)
-
   const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
     if(location.pathname === '/'){
