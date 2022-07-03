@@ -14,7 +14,7 @@ function Home() {
   useEffect(() => {
     if (userName) {
       setLoading(true);
-      getRepos(userName)
+      getRepos({userName})
         .then((data) => {
           setRepos(data);
         })

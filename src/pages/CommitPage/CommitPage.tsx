@@ -14,28 +14,37 @@ function CommitPage() {
   const [selectedBranch, setSelectedBranch] = useState<string>("0");
   const [commits, setCommits] = useState<any>([]);
   const [commitLoading, setCommitLoading] = useState(false);
+  const [branchLoading, setBranchLoading] = useState(false);
 
   useEffect(() => {
-    getBranches(userName, repoName).then((data) => {
-      setBranches(data);
-      const masterSha =
-        data.filter((d: any) => d.name === "master")?.[0]?.commit?.sha ?? "0";
-      setSelectedBranch(masterSha);
-    });
+    setBranchLoading(true);
+    getBranches({ userName, repoName })
+      .then((data) => {
+        setBranches(data);
+        const masterSha =
+          data.filter((d: any) => d.name === "master")?.[0]?.commit?.sha ?? "0";
+        setSelectedBranch(masterSha);
+      })
+      .catch((err) => {
+        console.log(err);
+        setBranches([]);
+        setSelectedBranch("0");
+      })
+      .finally(() => setBranchLoading(false));
   }, [userName, repoName]);
 
   useEffect(() => {
     if (selectedBranch !== "0") {
       setCommitLoading(true);
-      getCommits(userName, repoName, selectedBranch)
+      getCommits({ userName, repoName, branchSha: selectedBranch })
         .then((data) => {
           setCommits(data);
-          setCommitLoading(false);
         })
         .catch((err) => {
           console.log(err);
-          setCommitLoading(false);
-        });
+          setCommits([]);
+        })
+        .finally(() => setCommitLoading(false));
     }
   }, [userName, repoName, selectedBranch]);
 
@@ -55,13 +64,19 @@ function CommitPage() {
             <ChevronLeft />
           </IconButton>
         </Box>
-        <Box width={{ xs: "100%", sm: "60%", md: "30%" }}>
-          <BranchList
-            branches={branches}
-            value={selectedBranch}
-            handleChange={handleChange}
-          />
-        </Box>
+        {!branchLoading ? (
+          <Box width={{ xs: "100%", sm: "60%", md: "30%" }}>
+            <BranchList
+              branches={branches}
+              value={selectedBranch}
+              handleChange={handleChange}
+            />
+          </Box>
+        ) : (
+          <Box width={50} p={4} mx="auto">
+            <CircularProgress size={50} />
+          </Box>
+        )}
       </Box>
 
       {!commitLoading ? (
