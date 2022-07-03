@@ -6,14 +6,16 @@ interface Props {
 }
 
 function CommitListItem({ commit }: Props) {
+  const textEllipsis = {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  } 
+  
   const primary = (
     <Box
       component={"p"}
-      sx={{
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-      }}
+      sx={textEllipsis}
     >
       {commit.commit.message}
     </Box>
@@ -22,11 +24,7 @@ function CommitListItem({ commit }: Props) {
   const secondary = (
     <Box
       component={"p"}
-      sx={{
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-      }}
+      sx={textEllipsis}
     >
       {commit.commit.author.name} / {" "}
       {commit.commit.author.email} / {" "}

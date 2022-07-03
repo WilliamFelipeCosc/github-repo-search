@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ function CommitPage() {
   const [branches, setBranches] = useState<any>([]);
   const [selectedBranch, setSelectedBranch] = useState<string>("0");
   const [commits, setCommits] = useState<any>([]);
+  const [commitLoading, setCommitLoading] = useState(false);
 
   useEffect(() => {
     getBranches(userName, repoName).then((data) => {
@@ -25,9 +26,16 @@ function CommitPage() {
 
   useEffect(() => {
     if (selectedBranch !== "0") {
-      getCommits(userName, repoName, selectedBranch).then((data) =>
-        setCommits(data)
-      );
+      setCommitLoading(true);
+      getCommits(userName, repoName, selectedBranch)
+        .then((data) => {
+          setCommits(data);
+          setCommitLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setCommitLoading(false);
+        });
     }
   }, [userName, repoName, selectedBranch]);
 
@@ -56,7 +64,13 @@ function CommitPage() {
         </Box>
       </Box>
 
-      <CommitsList commits={commits} />
+      {!commitLoading ? (
+        <CommitsList commits={commits} />
+      ) : (
+        <Box width={50} p={4} mx="auto">
+          <CircularProgress size={50} />
+        </Box>
+      )}
     </Box>
   );
 }
