@@ -1,9 +1,11 @@
-import { IconButton, MenuItem, TextField } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBranches, getCommits } from "../../services/getGit";
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import CommitsList from "../../containers/CommitList";
+import BranchList from "../../containers/BranchList";
 
 function CommitPage() {
   const { repoName = "", userName = "" } = useParams();
@@ -13,7 +15,6 @@ function CommitPage() {
   const [commits, setCommits] = useState<any>([]);
 
   useEffect(() => {
-    console.log(repoName, userName);
     getBranches(userName, repoName).then((data) => {
       setBranches(data);
       const masterSha =
@@ -34,30 +35,28 @@ function CommitPage() {
     setSelectedBranch(e.target.value);
   };
 
-  console.log(repoName);
   return (
     <Box mt={2}>
-      <IconButton onClick={() => navigate('/')} sx={{ p: "10px", border: '1px solid #ccc' }} aria-label="search">
-                <ChevronLeft />
-              </IconButton>
-      {/* <Button onClick={() => navigate('/')}></Button> */}
-      <TextField
-        select
-        value={selectedBranch}
-        onChange={handleChange}
-        label="Selecione sua branch"
-      >
-        <MenuItem key={0} value={"0"} disabled>
-          Selecione sua branch
-        </MenuItem>
-        {branches?.length > 0 &&
-          branches?.map((branch: any) => (
-            <MenuItem key={branch?.commit?.sha} value={branch?.commit?.sha}>
-              {branch.name}
-            </MenuItem>
-          ))}
-      </TextField>
-      <Box mt={2}>{commits.length > 0 && commits.map((commit:any) => <Box key={commit?.sha}>{commit.commit.message}</Box>)}</Box>
+      <Box display={"flex"} alignItems="center" gap={1}>
+        <Box>
+          <IconButton
+            onClick={() => navigate("/")}
+            sx={{ p: 1 }}
+            aria-label="return"
+          >
+            <ChevronLeft />
+          </IconButton>
+        </Box>
+        <Box width={{ xs: "100%", sm: "60%", md: "30%" }}>
+          <BranchList
+            branches={branches}
+            value={selectedBranch}
+            handleChange={handleChange}
+          />
+        </Box>
+      </Box>
+
+      <CommitsList commits={commits} />
     </Box>
   );
 }
